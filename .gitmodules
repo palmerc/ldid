@@ -1,3 +1,3 @@
 [submodule "libplist"]
 	path = libplist
-	url = http://git.libimobiledevice.org/libplist.git
+url=git@github.com:palmerc/libplist.git
