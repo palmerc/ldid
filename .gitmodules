@@ -1,3 +1,6 @@
 [submodule "libplist"]
 	path = libplist
 url=git@github.com:palmerc/libplist.git
+[submodule "openssl"]
+	path = openssl
+	url = https://github.com/palmerc/CMake_OpenSSL.git
