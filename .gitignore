@@ -1,7 +1,4 @@
-ios
-out
-ldid
-ldid.deb
-debs
-*.o
-_
+.idea
+build-iphoneos
+build-macosx
+cmake-build-debug
