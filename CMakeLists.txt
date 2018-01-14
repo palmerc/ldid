@@ -52,5 +52,6 @@ target_link_libraries( ldid
     cnary
     openssl_crypto
     openssl_ssl )
+
 install( TARGETS ldid
     RUNTIME DESTINATION bin )
