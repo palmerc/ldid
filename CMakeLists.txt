@@ -6,6 +6,10 @@ if( NOT DEFINED CMAKE_TOOLCHAIN_FILE )
     set( CMAKE_C_COMPILER clang )
     set( CMAKE_CXX_COMPILER clang++ )
     set( CMAKE_OSX_ARCHITECTURES x86_64 CACHE STRING "" )
+    execute_process( COMMAND xcrun --sdk ${SDK} --show-sdk-path
+            OUTPUT_VARIABLE CMAKE_OSX_SYSROOT
+            OUTPUT_STRIP_TRAILING_WHITESPACE )
+    set( CMAKE_OSX_SYSROOT ${CMAKE_OSX_SYSROOT} CACHE PATH "sysroot" )
 endif()
 
 project( ldid )
@@ -16,20 +20,11 @@ set( CMAKE_CXX_STANDARD 11 )
 add_subdirectory( libplist )
 
 # Add External Project OpenSSL
-add_subdirectory( openssl )
-add_library( openssl_crypto STATIC IMPORTED )
-set_property( TARGET openssl_crypto
-        PROPERTY
-            IMPORTED_LOCATION ${OPENSSL_CRYPTO_PATH} )
-add_dependencies( openssl_crypto ${OPENSSL_TARGET} )
+set( LIBRESSL_APPS OFF )
+set( LIBRESSL_TESTS OFF )
+set( LIBRESSL_SKIP_INSTALL ON )
 
-add_library( openssl_ssl STATIC IMPORTED )
-set_property( TARGET openssl_ssl
-        PROPERTY
-            IMPORTED_LOCATION ${OPENSSL_SSL_PATH} )
-message( "OPENSSL_INCLUDE_DIR ${OPENSSL_INCLUDE_DIR}" )
-include_directories( ${OPENSSL_INCLUDE_DIR} )
-add_dependencies( openssl_ssl ${OPENSSL_TARGET} )
+add_subdirectory( libressl )
 
 # Add osx sysroot version of libxml2
 set( XML2_INCLUDES_PATH ${CMAKE_OSX_SYSROOT}/usr/lib/libxml2.tbd )
@@ -45,13 +40,12 @@ set( SOURCE_FILES
     ldid.cpp )
 
 add_executable( ldid ${SOURCE_FILES} )
-add_dependencies( ldid ${OPENSSL_TARGET} )
 target_link_libraries( ldid
     xml2
     plist
     cnary
-    openssl_crypto
-    openssl_ssl )
+    crypto
+    ssl )
 
 install( TARGETS ldid
     RUNTIME DESTINATION bin )

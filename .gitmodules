@@ -4,3 +4,6 @@
 [submodule "openssl"]
 	path = openssl
 	url = https://github.com/palmerc/CMake_OpenSSL.git
+[submodule "libressl"]
+	path = libressl
+	url = git@github.com:palmerc/libressl.git
